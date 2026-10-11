@@ -1,0 +1,196 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --theme-bg-gradient: linear-gradient(135deg, #fffaf5 0%, #fff1f2 50%, #fdf2f8 100%);
+    --theme-card-bg: rgba(255, 255, 255, 0.85);
+    --theme-accent: #f43f5e;
+    --theme-accent-soft: #ffe4e6;
+  }
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.font-handwriting {
+  font-family: 'Caveat', cursive;
+}
+
+.font-serif-title {
+  font-family: 'Playfair Display', serif;
+}
+
+/* Corkboard & Softboard textures */
+.bg-corkboard {
+  background-color: #f7ede2;
+  background-image: 
+    radial-gradient(#dfc5ab 15%, transparent 16%), 
+    radial-gradient(#eedbc5 15%, transparent 16%);
+  background-size: 24px 24px;
+  background-position: 0 0, 12px 12px;
+}
+
+.bg-softboard {
+  background-color: #fcf9f2;
+  background-image: radial-gradient(#eadbc8 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(200, 180, 180, 0.4);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(180, 150, 150, 0.6);
+}
+
+/* Polaroid Pin & Develop Keyframe Animations */
+@keyframes polaroidDevelop {
+  0% {
+    opacity: 0;
+    transform: scale(0.92) translateY(12px);
+    filter: blur(4px) contrast(1.4) brightness(1.2);
+  }
+  60% {
+    opacity: 0.9;
+    filter: blur(1px) contrast(1.1) brightness(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    filter: blur(0px) contrast(1) brightness(1);
+  }
+}
+
+@keyframes flyToBoard {
+  0% {
+    opacity: 0;
+    transform: translateY(60px) scale(0.7) rotate(0deg);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(-8px) scale(1.04) rotate(var(--target-rot, 3deg));
+  }
+  85% {
+    transform: translateY(2px) scale(0.99) rotate(var(--target-rot, 3deg));
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotate(var(--target-rot, 3deg));
+  }
+}
+
+@keyframes pinPop {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+  }
+  60% {
+    transform: translate(-50%, -50%) scale(1.35);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes gentleFloat {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes mapPinBounce {
+  0% {
+    opacity: 0;
+    transform: translateY(-26px) scale(0.35);
+  }
+  55% {
+    opacity: 1;
+    transform: translateY(3px) scale(1.2);
+  }
+  75% {
+    transform: translateY(-2px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes mapBeaconRipple {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+
+.animate-develop {
+  animation: polaroidDevelop 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-fly-pin {
+  animation: flyToBoard 0.75s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.animate-pin-pop {
+  animation: pinPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.animate-map-pin-bounce {
+  animation: mapPinBounce 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.animate-beacon-ripple {
+  animation: mapBeaconRipple 1.4s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+}
+
+.animate-float {
+  animation: gentleFloat 3s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+@keyframes heartbeat {
+  0% { transform: scale(1); }
+  14% { transform: scale(1.12); }
+  28% { transform: scale(1); }
+  42% { transform: scale(1.12); }
+  70% { transform: scale(1); }
+}
+
+.animate-heartbeat {
+  animation: heartbeat 1.5s ease-in-out infinite;
+}

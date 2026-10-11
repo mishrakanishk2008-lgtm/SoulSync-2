@@ -1,0 +1,65 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // Legacy collections (for reading old messages/notes/profiles during one-time migration)
+    match /profiles/{profileId} {
+      allow read, write: if true;
+    }
+    match /messages/{messageId} {
+      allow read, write: if true;
+    }
+    match /notes/{noteId} {
+      allow read, write: if true;
+    }
+
+    // Shared Couple Sanctuary collections: couples/{coupleCode}/...
+    match /couples/{coupleCode} {
+      allow read, write: if true;
+
+      match /profiles/{profileId} {
+        allow read, write: if true;
+      }
+      match /messages/{messageId} {
+        allow read, write: if true;
+      }
+      match /notes/{noteId} {
+        allow read, write: if true;
+      }
+      match /snaps/{snapId} {
+        allow read, write: if true;
+      }
+      match /memes/{memeId} {
+        allow read, write: if true;
+      }
+      match /events/{eventId} {
+        allow read, write: if true;
+      }
+      match /checklist/{checklistId} {
+        allow read, write: if true;
+      }
+      match /moods/{moodId} {
+        allow read, write: if true;
+      }
+      match /somedayList/{itemId} {
+        allow read, write: if true;
+      }
+      match /vibes/{vibeId} {
+        allow read, write: if true;
+      }
+      match /quoteThemes/{quoteId} {
+        allow read, write: if true;
+      }
+    }
+
+    // Default deny for everything else
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

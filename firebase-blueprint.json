@@ -1,0 +1,158 @@
+{
+  "entities": {
+    "CoupleSpace": {
+      "title": "CoupleSpace",
+      "description": "Shared couple sanctuary space",
+      "type": "object",
+      "properties": {
+        "code": { "type": "string" },
+        "members": { "type": "array", "items": { "type": "string" } },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["code"]
+    },
+    "PartnerProfile": {
+      "title": "PartnerProfile",
+      "description": "Synced partner identity profile",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "uid": { "type": "string" },
+        "name": { "type": "string" },
+        "avatarEmoji": { "type": "string" },
+        "avatarColor": { "type": "string" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "name"]
+    },
+    "ChatMessage": {
+      "title": "ChatMessage",
+      "description": "A real-time chat message",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "text": { "type": "string" },
+        "type": { "type": "string" },
+        "senderId": { "type": "string" },
+        "senderName": { "type": "string" },
+        "senderAvatar": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "media": { "type": "object" },
+        "reactions": { "type": "object" }
+      },
+      "required": ["id", "senderId", "senderName"]
+    },
+    "LoveNote": {
+      "title": "LoveNote",
+      "description": "Shared corkboard sticky note",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "text": { "type": "string" },
+        "color": { "type": "string" },
+        "pinned": { "type": "boolean" },
+        "senderId": { "type": "string" },
+        "senderName": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "reactions": { "type": "object" }
+      },
+      "required": ["id", "text", "color", "pinned", "senderId", "senderName"]
+    },
+    "SnapPhoto": {
+      "title": "SnapPhoto",
+      "description": "Polaroid snap photo document",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "imageData": { "type": "string" },
+        "caption": { "type": "string" },
+        "senderId": { "type": "string" },
+        "senderName": { "type": "string" },
+        "filter": { "type": "string" },
+        "stickers": { "type": "string" },
+        "pinX": { "type": "number" },
+        "pinY": { "type": "number" },
+        "rotation": { "type": "number" },
+        "reactions": { "type": "object" },
+        "pinned": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "imageData", "senderId", "senderName"]
+    },
+    "CoupleEvent": {
+      "title": "CoupleEvent",
+      "description": "Countdown event milestone",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "date": { "type": "string" },
+        "category": { "type": "string" },
+        "reminderToggle": { "type": "boolean" },
+        "creator": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "title", "date", "category"]
+    },
+    "DailyChecklistDoc": {
+      "title": "DailyChecklistDoc",
+      "description": "One document per day with each partner's completion state",
+      "type": "object",
+      "properties": {
+        "date": { "type": "string" },
+        "items": { "type": "array" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["date", "items"]
+    },
+    "MoodCheckinDoc": {
+      "title": "MoodCheckinDoc",
+      "description": "Mood check-in per partner per day",
+      "type": "object",
+      "properties": {
+        "date": { "type": "string" },
+        "partnerSlot": { "type": "string" },
+        "partnerId": { "type": "string" },
+        "emoji": { "type": "string" },
+        "label": { "type": "string" },
+        "category": { "type": "string" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["date", "partnerId", "emoji"]
+    },
+    "SomedayItemDoc": {
+      "title": "SomedayItemDoc",
+      "description": "Bucket list someday item",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "text": { "type": "string" },
+        "completed": { "type": "boolean" },
+        "addedBy": { "type": "string" },
+        "completedDate": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "text", "completed", "addedBy"]
+    },
+    "WeeklyVibeDoc": {
+      "title": "WeeklyVibeDoc",
+      "description": "Weekly song vibes and heart sync",
+      "type": "object",
+      "properties": {
+        "weekKey": { "type": "string" },
+        "p1Tracks": { "type": "array" },
+        "p2Tracks": { "type": "array" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["weekKey"]
+    }
+  },
+  "firestore": {
+    "couples": {
+      "schema": "CoupleSpace",
+      "description": "Root collection for couple spaces identified by 6-char code"
+    }
+  }
+}

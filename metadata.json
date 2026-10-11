@@ -1,0 +1,6 @@
+{
+  "name": "SoulSync",
+  "description": "Warm, aesthetic private couple dashboard for love notes, polaroid snaps, milestone countdowns, and AI date planning.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
