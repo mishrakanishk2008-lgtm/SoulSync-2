@@ -51,7 +51,7 @@ const STORAGE_KEYS = {
 
 export interface LocalUserIdentity {
   userId: string;
-  slotId: 'p1' | 'p2';
+  slotId?: 'p1' | 'p2';
   name: string;
   avatarEmoji: string;
   avatarColor: string;

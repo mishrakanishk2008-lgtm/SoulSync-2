@@ -136,10 +136,10 @@ export interface SomedayItem {
 }
 
 export interface PartnerProfile {
-  id: 'p1' | 'p2';
+  id: string;
   name: string;
   avatarEmoji: string;
-  avatarColor: string; // Tailwind hex or class
+  avatarColor: string;
 }
 
 export type AppThemePreset =
@@ -175,7 +175,7 @@ export interface DateVoiceMemo {
   durationSeconds: number;
   recordedAt: string;
   recordedBy: string;
-  partnerId: 'p1' | 'p2';
+  partnerId: string;
   caption?: string;
 }
 
@@ -230,7 +230,7 @@ export interface SpotifyTrackItem {
   artist: string;
   albumArt: string;
   spotifyUrl?: string;
-  addedBy: 'p1' | 'p2';
+  addedBy: string;
   addedByName: string;
   addedAt: string;
   hearts?: Record<string, boolean>; // e.g. { 'p1': true, 'p2': true }

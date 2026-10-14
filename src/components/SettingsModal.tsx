@@ -70,11 +70,10 @@ export function SettingsModal({
     onSavePartners(updated);
 
     const currentUser = storage.getCurrentUser();
-    const coupleCode = storage.getCoupleCode();
+    const coupleCode = 'main';
     try {
       if (currentUser) {
-        const mySlot = currentUser.slotId;
-        const myUpdated = updated.find(p => p.id === mySlot);
+        const myUpdated = updated[0];
         if (myUpdated) {
           storage.saveCurrentUser({
             ...currentUser,
@@ -82,18 +81,16 @@ export function SettingsModal({
             avatarEmoji: myUpdated.avatarEmoji,
             avatarColor: myUpdated.avatarColor || currentUser.avatarColor,
           });
-          if (coupleCode) {
-            await setDoc(doc(db, 'couples', coupleCode, 'profiles', mySlot), {
-              id: mySlot,
-              userId: currentUser.userId,
-              name: myUpdated.name,
-              avatarEmoji: myUpdated.avatarEmoji,
-              avatarColor: myUpdated.avatarColor || currentUser.avatarColor,
-              updatedAt: new Date().toISOString(),
-            }, { merge: true });
-          }
+          await setDoc(doc(db, 'couples', coupleCode, 'profiles', currentUser.userId), {
+            id: currentUser.userId,
+            userId: currentUser.userId,
+            name: myUpdated.name,
+            avatarEmoji: myUpdated.avatarEmoji,
+            avatarColor: myUpdated.avatarColor || currentUser.avatarColor,
+            updatedAt: new Date().toISOString(),
+          }, { merge: true });
         }
-      } else if (coupleCode) {
+      } else {
         for (const p of updated) {
           await setDoc(doc(db, 'couples', coupleCode, 'profiles', p.id), {
             id: p.id,
@@ -426,29 +423,6 @@ export function SettingsModal({
                 </p>
               </div>
 
-              {/* Couple Space Code Box */}
-              <div className="rounded-2xl border border-rose-200 bg-rose-50/70 p-4 space-y-2">
-                <span className="text-xs font-bold text-rose-800 uppercase tracking-wider block">Our Couple Sanctuary Code</span>
-                <p className="text-[11px] text-stone-600">Share this 6-character code with your partner so they can join your space:</p>
-                <div className="flex items-center gap-2">
-                  <span className="font-mono text-lg font-bold text-rose-600 bg-white px-3 py-1 rounded-xl border border-rose-200">
-                    {storage.getCoupleCode() || 'None'}
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const code = storage.getCoupleCode();
-                      if (code) {
-                        navigator.clipboard.writeText(code);
-                        onShowToast('Couple code copied to clipboard! 📋');
-                      }
-                    }}
-                    className="rounded-xl bg-rose-500 px-3 py-1.5 text-xs font-semibold text-white hover:bg-rose-600 cursor-pointer"
-                  >
-                    Copy Code
-                  </button>
-                </div>
-              </div>
 
               <div className="rounded-2xl border border-stone-200 bg-stone-50/50 p-4 space-y-3">
                 <button

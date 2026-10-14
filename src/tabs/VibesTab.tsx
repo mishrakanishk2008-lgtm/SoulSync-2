@@ -362,10 +362,10 @@ export function VibesTab({
   };
 
   // TOGGLE HEART REACTION ON TRACK
-  const handleToggleHeartTrack = (targetPartnerId: 'p1' | 'p2', trackId: string) => {
+  const handleToggleHeartTrack = (targetPartnerId: string, trackId: string) => {
     sound.playHeartReaction();
 
-    const isTargetP1 = targetPartnerId === 'p1';
+    const isTargetP1 = targetPartnerId === 'p1' || targetPartnerId === partners[0]?.id;
     const list = isTargetP1 ? weeklyVibes.p1Tracks : weeklyVibes.p2Tracks;
 
     const updatedList = list.map(t => {
@@ -389,10 +389,10 @@ export function VibesTab({
   };
 
   // DELETE TRACK FROM LIST
-  const handleDeleteTrack = (targetPartnerId: 'p1' | 'p2', trackId: string) => {
+  const handleDeleteTrack = (targetPartnerId: string, trackId: string) => {
     sound.playSoftChime();
 
-    const isTargetP1 = targetPartnerId === 'p1';
+    const isTargetP1 = targetPartnerId === 'p1' || targetPartnerId === partners[0]?.id;
     const list = isTargetP1 ? weeklyVibes.p1Tracks : weeklyVibes.p2Tracks;
     const updatedList = list.filter(t => t.id !== trackId);
 
@@ -722,18 +722,18 @@ export function VibesTab({
 
           {/* SEARCH RESULTS MODAL / DROPDOWN */}
           {showSearchModal && (
-            <div className="rounded-3xl border border-rose-200 bg-white p-5 shadow-lg animate-pin-pop">
-              <div className="flex items-center justify-between pb-3 border-b border-stone-100 mb-3">
-                <div className="flex items-center space-x-2">
-                  <Disc className="h-5 w-5 text-rose-600" />
-                  <h3 className="font-serif-title text-base font-bold text-stone-800">
+            <div className="w-full max-w-full box-border overflow-hidden rounded-3xl border border-rose-200 bg-white p-4 sm:p-5 shadow-lg animate-pin-pop">
+              <div className="flex items-center justify-between pb-3 border-b border-stone-100 mb-3 gap-2">
+                <div className="flex items-center space-x-2 truncate min-w-0 pr-1">
+                  <Disc className="h-5 w-5 text-rose-600 shrink-0" />
+                  <h3 className="font-serif-title text-sm sm:text-base font-bold text-stone-800 truncate">
                     Spotify Search Results for "{searchQuery}"
                   </h3>
                 </div>
                 <button
                   type="button"
                   onClick={() => setShowSearchModal(false)}
-                  className="rounded-full p-1 text-stone-400 hover:bg-stone-100"
+                  className="rounded-full p-2 text-stone-500 hover:bg-stone-100 shrink-0 cursor-pointer"
                 >
                   <X className="h-5 w-5" />
                 </button>

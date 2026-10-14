@@ -61,7 +61,7 @@ import { db, auth, useOnlineStatus, signInAnonymously } from './utils/firebase';
 
 export default function App() {
   // Primary state loaded from LocalStorage
-  const [coupleCode, setCoupleCode] = useState<string | null>(() => storage.getCoupleCode());
+  const coupleCode = 'main';
   const [partners, setPartners] = useState<PartnerProfile[]>(() => storage.getPartners());
   const [settings, setSettings] = useState<CoupleSettings>(() => storage.getSettings());
   const [notes, setNotes] = useState<LoveNote[]>(() => storage.getNotes());
@@ -1095,7 +1095,7 @@ export default function App() {
   }, [settings.activeTheme, settings.customBackgroundGradient]);
 
   // ONBOARDING MODAL
-  if (!settings.hasOnboarded || !coupleCode) {
+  if (!settings.hasOnboarded || !storage.getCurrentUser()) {
     return (
       <OnboardingModal
         initialPartners={partners}
@@ -1103,7 +1103,6 @@ export default function App() {
         onComplete={(newPartners, newSettings) => {
           setPartners(newPartners);
           setSettings(newSettings);
-          setCoupleCode(storage.getCoupleCode());
           showToast('Welcome to SoulSync! 💕');
         }}
       />

@@ -856,147 +856,178 @@ export function ChatNotesTab({
             </div>
           )}
 
-          {/* GIF Picker Popover in Input (KLIPY) */}
+          {/* GIF Picker Bottom Sheet Modal */}
           {showGifPicker && (
-            <div className="mb-2 rounded-2xl border border-rose-100 bg-stone-50 p-3 shadow-md animate-pin-pop max-h-[300px] overflow-hidden flex flex-col">
-              <div className="flex items-center justify-between gap-2 border-b border-rose-100/60 pb-2 mb-2">
-                <span className="text-xs font-bold text-stone-700 flex items-center gap-1.5">
-                  <span>🎬</span> {gifSearchQuery.trim() ? 'Search GIFs' : 'Trending GIFs 🔥'}
-                </span>
-                
-                {/* Popular Quick Suggestions */}
-                <div className="flex items-center gap-1 overflow-x-auto max-w-[210px] scrollbar-none">
-                  {['🔥 Trending', 'Hug', 'Kiss', 'Love', 'Cute', 'Miss you'].map(tag => {
-                    const isTrendingTag = tag === '🔥 Trending';
-                    const activeTag = isTrendingTag ? !gifSearchQuery.trim() : gifSearchQuery.trim().toLowerCase() === tag.toLowerCase();
-                    return (
-                      <button
-                        key={tag}
-                        type="button"
-                        onClick={() => {
-                          if (isTrendingTag) {
-                            setGifSearchQuery('');
-                          } else {
-                            setGifSearchQuery(tag);
-                          }
-                        }}
-                        className={`rounded-full px-2.5 py-0.5 text-[9px] font-bold transition-colors cursor-pointer shrink-0 border ${
-                          activeTag
-                            ? 'bg-rose-500 text-white border-rose-500'
-                            : 'bg-rose-50 border-rose-100 text-rose-600 hover:bg-rose-100'
-                        }`}
-                      >
-                        {tag}
-                      </button>
-                    );
-                  })}
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => setShowGifPicker(false)}
-                  className="text-stone-400 hover:text-stone-700 text-xs font-bold cursor-pointer"
-                >
-                  Close
-                </button>
-              </div>
-
-              {/* Live Search Box */}
-              <div className="mb-2 relative">
-                <Search className="absolute left-3 top-2.5 h-3.5 w-3.5 text-stone-400" />
-                <input
-                  type="text"
-                  value={gifSearchQuery}
-                  onChange={e => setGifSearchQuery(e.target.value)}
-                  placeholder="Search GIFs (e.g. hug, kiss, cute) or leave blank for trending..."
-                  className="w-full rounded-xl border border-stone-200 bg-white pl-8 pr-8 py-1.5 text-xs text-stone-800 placeholder-stone-400 focus:border-rose-400 focus:outline-none"
-                />
-                {gifSearchQuery && (
+            <div
+              className="fixed inset-0 z-50 flex flex-col justify-end bg-stone-950/60 backdrop-blur-xs"
+              onClick={() => setShowGifPicker(false)}
+            >
+              <div
+                className="w-full max-w-lg mx-auto max-h-[70dvh] h-[70dvh] rounded-t-3xl bg-white shadow-2xl flex flex-col pb-[env(safe-area-inset-bottom)] overflow-hidden"
+                onClick={e => e.stopPropagation()}
+              >
+                {/* Header */}
+                <div className="flex items-center justify-between border-b border-stone-100 px-4 py-3 shrink-0 bg-white">
+                  <div className="flex items-center gap-2">
+                    <span className="text-base">🎬</span>
+                    <h3 className="font-serif-title text-sm font-bold text-stone-800">
+                      {gifSearchQuery.trim() ? 'Search GIFs' : 'Trending GIFs 🔥'}
+                    </h3>
+                  </div>
                   <button
                     type="button"
-                    onClick={() => setGifSearchQuery('')}
-                    className="absolute right-2.5 top-2 text-stone-400 hover:text-stone-700 text-[10px] font-bold"
+                    onClick={() => setShowGifPicker(false)}
+                    className="flex h-8 w-8 items-center justify-center rounded-full text-stone-400 hover:bg-stone-100 hover:text-stone-700 cursor-pointer"
                   >
-                    Clear
+                    <X className="h-4 w-4" />
                   </button>
-                )}
-              </div>
+                </div>
 
-              {/* GIF Results Grid */}
-              <div className="flex-1 overflow-y-auto min-h-[140px] pr-1">
-                {isSearchingGifs ? (
-                  <div className="flex h-32 flex-col items-center justify-center space-y-2 text-stone-400">
-                    <RefreshCw className="h-5 w-5 animate-spin text-rose-500" />
-                    <p className="text-[10px] font-bold">Fetching sweet GIFs...</p>
+                {/* Search & Suggestions */}
+                <div className="p-3 border-b border-stone-100 bg-stone-50 shrink-0 space-y-2">
+                  <div className="relative">
+                    <Search className="absolute left-3 top-2.5 h-4 w-4 text-stone-400" />
+                    <input
+                      type="text"
+                      value={gifSearchQuery}
+                      onChange={e => setGifSearchQuery(e.target.value)}
+                      placeholder="Search GIFs (e.g. hug, kiss, cute)..."
+                      className="w-full rounded-xl border border-stone-200 bg-white pl-9 pr-8 py-2 text-xs text-stone-800 focus:border-rose-400 focus:outline-none"
+                      autoFocus
+                    />
+                    {gifSearchQuery && (
+                      <button
+                        type="button"
+                        onClick={() => setGifSearchQuery('')}
+                        className="absolute right-2.5 top-2 text-stone-400 hover:text-stone-700 text-xs font-bold"
+                      >
+                        Clear
+                      </button>
+                    )}
                   </div>
-                ) : gifError ? (
-                  <div className="flex h-32 flex-col items-center justify-center p-3 text-center space-y-2">
-                    <AlertCircle className="h-5 w-5 text-amber-500" />
-                    <p className="text-xs font-medium text-stone-700">
-                      {gifError}
-                    </p>
-                    <div className="flex items-center gap-2 mt-1">
+                  <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none pb-1">
+                    {['🔥 Trending', 'Hug', 'Kiss', 'Love', 'Cute', 'Miss you', 'Heart'].map(tag => {
+                      const isTrendingTag = tag === '🔥 Trending';
+                      const activeTag = isTrendingTag ? !gifSearchQuery.trim() : gifSearchQuery.trim().toLowerCase() === tag.toLowerCase();
+                      return (
+                        <button
+                          key={tag}
+                          type="button"
+                          onClick={() => {
+                            if (isTrendingTag) setGifSearchQuery('');
+                            else setGifSearchQuery(tag);
+                          }}
+                          className={`rounded-full px-3 py-1 text-[11px] font-bold transition-colors cursor-pointer shrink-0 border ${
+                            activeTag
+                              ? 'bg-rose-500 text-white border-rose-500'
+                              : 'bg-white border-stone-200 text-stone-600 hover:bg-rose-50'
+                          }`}
+                        >
+                          {tag}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Results Grid */}
+                <div className="flex-1 overflow-y-auto p-3">
+                  {isSearchingGifs ? (
+                    <div className="flex h-40 flex-col items-center justify-center space-y-2 text-stone-400">
+                      <RefreshCw className="h-6 w-6 animate-spin text-rose-500" />
+                      <p className="text-xs font-bold">Finding sweet GIFs...</p>
+                    </div>
+                  ) : gifError ? (
+                    <div className="flex h-40 flex-col items-center justify-center p-4 text-center space-y-2">
+                      <AlertCircle className="h-6 w-6 text-amber-500" />
+                      <p className="text-xs font-medium text-stone-700">{gifError}</p>
                       <button
                         type="button"
                         onClick={() => {
                           setShowGifPicker(false);
                           fileInputRef.current?.click();
                         }}
-                        className="flex items-center gap-1 rounded-xl bg-rose-500 px-3 py-1 text-[11px] font-bold text-white shadow-xs hover:bg-rose-600 transition-colors cursor-pointer"
+                        className="mt-2 rounded-xl bg-rose-500 px-4 py-1.5 text-xs font-bold text-white shadow-xs hover:bg-rose-600 cursor-pointer"
                       >
-                        <Paperclip className="h-3 w-3" />
-                        <span>Use 📎 button</span>
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setGifError(null);
-                          setGifSearchQuery('');
-                        }}
-                        className="flex items-center gap-1 rounded-xl border border-stone-200 bg-white px-2.5 py-1 text-[11px] font-medium text-stone-600 hover:bg-stone-50 transition-colors cursor-pointer"
-                      >
-                        <RefreshCw className="h-3 w-3" />
-                        <span>Retry</span>
+                        Use 📎 button instead
                       </button>
                     </div>
+                  ) : gifResults.length === 0 ? (
+                    <div className="flex h-40 flex-col items-center justify-center text-stone-400">
+                      <p className="text-xs">No GIFs found. Try another sweet search! 💌</p>
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                      {gifResults.map(gif => (
+                        <button
+                          key={gif.id}
+                          type="button"
+                          onClick={() => {
+                            sound.playHeartReaction();
+                            const caption = messageText.trim();
+                            onSendMessage(caption, undefined, {
+                              type: 'gif',
+                              url: gif.url,
+                              fileName: 'klipy.gif',
+                              fileSize: 0,
+                            });
+                            setMessageText('');
+                            setShowGifPicker(false);
+                            onShowToast('Sent sweet GIF! 🎬💕');
+                          }}
+                          className="relative overflow-hidden rounded-2xl border border-stone-200 bg-stone-100 hover:border-rose-400 hover:scale-[1.02] transition-all active:scale-95 group cursor-pointer aspect-video sm:aspect-4/3"
+                          title={gif.title || 'Send GIF'}
+                        >
+                          <img
+                            src={gif.previewUrl}
+                            alt={gif.title || 'GIF'}
+                            className="h-full w-full object-cover"
+                            loading="lazy"
+                          />
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Emoji Picker Bottom Sheet Modal */}
+          {showEmojiPicker && (
+            <div
+              className="fixed inset-0 z-50 flex flex-col justify-end bg-stone-950/60 backdrop-blur-xs"
+              onClick={() => setShowEmojiPicker(false)}
+            >
+              <div
+                className="w-full max-w-lg mx-auto max-h-[70dvh] h-[70dvh] rounded-t-3xl bg-white shadow-2xl flex flex-col pb-[env(safe-area-inset-bottom)] overflow-hidden"
+                onClick={e => e.stopPropagation()}
+              >
+                <div className="flex items-center justify-between border-b border-stone-100 px-4 py-3 shrink-0 bg-white">
+                  <div className="flex items-center gap-2">
+                    <span className="text-base">😊</span>
+                    <h3 className="font-serif-title text-sm font-bold text-stone-800">
+                      Pick an Emoji
+                    </h3>
                   </div>
-                ) : gifResults.length === 0 ? (
-                  <div className="flex h-32 flex-col items-center justify-center text-stone-400">
-                    <p className="text-[10px]">No matches found. Try searching another sweet term! 💌</p>
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-3 gap-1.5">
-                    {gifResults.map((gif) => (
-                      <button
-                        key={gif.id}
-                        type="button"
-                        onClick={() => {
-                          sound.playHeartReaction();
-                          const caption = messageText.trim();
-                          onSendMessage(caption, undefined, {
-                            type: 'gif',
-                            url: gif.url,
-                            fileName: 'klipy.gif',
-                            fileSize: 0,
-                          });
-                          setMessageText('');
-                          setShowGifPicker(false);
-                          onShowToast('Sent sweet GIF! 🎬💕');
-                        }}
-                        className="relative overflow-hidden rounded-xl border border-stone-200 bg-stone-100 hover:border-rose-400 hover:scale-[1.02] transition-all active:scale-95 group/gif cursor-pointer aspect-4/3"
-                        title={gif.title || 'Send GIF'}
-                      >
-                        <img
-                          src={gif.previewUrl}
-                          alt={gif.title || 'GIF animation'}
-                          loading="lazy"
-                          className="h-full w-full object-cover"
-                        />
-                        <div className="absolute inset-0 bg-black/10 group-hover/gif:bg-transparent transition-colors" />
-                      </button>
-                    ))}
-                  </div>
-                )}
+                  <button
+                    type="button"
+                    onClick={() => setShowEmojiPicker(false)}
+                    className="flex h-8 w-8 items-center justify-center rounded-full text-stone-400 hover:bg-stone-100 hover:text-stone-700 cursor-pointer"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                </div>
+                <div className="flex-1 overflow-y-auto p-2">
+                  <EmojiPicker
+                    partnerId={storage.getCurrentUser()?.userId || 'device'}
+                    onSelectEmoji={(em) => {
+                      setMessageText(prev => prev + em);
+                    }}
+                    title=""
+                    className="h-full border-0 shadow-none rounded-none"
+                  />
+                </div>
               </div>
             </div>
           )}
@@ -1060,13 +1091,7 @@ export function ChatNotesTab({
               type="text"
               value={messageText}
               onChange={e => setMessageText(e.target.value)}
-              placeholder={(() => {
-                if (attachedMedia) return 'Add an optional caption...';
-                const currentUser = storage.getCurrentUser();
-                const otherPartner = partners.find(p => p.id !== currentUser?.slotId) || partners[1] || partners[0];
-                const otherName = otherPartner?.name || 'your partner';
-                return `Send a sweet thought to ${otherName}...`;
-              })()}
+              placeholder={attachedMedia ? 'Add an optional caption...' : 'Send a sweet thought...'}
               className="flex-1 bg-transparent px-2 text-xs text-stone-800 placeholder-stone-400 focus:outline-none"
             />
 
